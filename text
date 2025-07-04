@@ -1,1 +1,186 @@
-https://chatgpt.com/share/68681a2d-c758-8002-a2de-75f083d65d6a
+Excellent. For an **academic paper**, your methodology section must be precise, rigorous, and transparent. Here’s a refined and expanded version of the **methodology** tailored for academic submission:
+
+---
+
+## **4. Methodology**
+
+### **4.1 Policy Background and Research Design**
+
+In April 2018, the UK government implemented the **Minimum Energy Efficiency Standard (MEES)**, which prohibits landlords from letting residential properties with an **Energy Performance Certificate (EPC) rating below E**. This regulation constitutes an exogenous policy shock to part of the rental market and forms the basis of our identification strategy.
+
+We exploit this regulatory change using a **Difference-in-Differences (DiD)** framework, comparing the evolution of outcomes for **non-compliant properties (EPC F or G pre-policy)** and **compliant properties (EPC E or above pre-policy)** before and after MEES enforcement.
+
+This strategy assumes that, in the absence of the MEES regulation, treated and control properties would have followed **parallel trends** in key outcomes.
+
+---
+
+### **4.2 Sample and Data Construction**
+
+We use panel data on rental property listings across England between **2015 and 2021**, drawing from EPC records and listing platforms. Properties are identified through a unique ID and tracked across time. Our final analytic sample excludes:
+
+* Listings with missing or inconsistent EPC records.
+* New-build properties or student-specific listings, which may be governed by separate regulations.
+* Properties outside England, to ensure uniform policy exposure.
+
+---
+
+### **4.3 Defining Treatment and Outcome Variables**
+
+#### **Treatment Definition**
+
+The **treatment group** comprises properties with a pre-policy EPC rating of **F or G**. These properties are directly targeted by MEES and are legally required to upgrade to **at least EPC E** to remain on the rental market.
+
+The **control group** includes properties with pre-policy EPC ratings of **E or above**, which were not affected by the regulation.
+
+#### **Outcome Categories**
+
+We categorize post-policy outcomes for properties initially rated F or G into three mutually exclusive classes:
+
+1. **Upgrade**: Properties upgraded to EPC E or above.
+2. **Exit**: Properties that are no longer listed in the post-policy period, assumed to have exited the rental market.
+3. **Non-Compliance**: Properties that remain listed but still have an EPC rating below E.
+
+These outcomes allow us to examine both **compliance behaviour** and **market exits** in response to MEES.
+
+---
+
+### **4.4 Empirical Strategy**
+
+#### **4.4.1 Baseline DiD Estimation**
+
+We begin with a standard DiD model to estimate the average treatment effect on binary outcomes such as upgrade or market exit:
+
+$$
+Y_{it} = \alpha + \beta_1 \text{Treated}_i + \beta_2 \text{Post}_t + \delta (\text{Treated}_i \times \text{Post}_t) + \mathbf{X}_{it}'\gamma + \epsilon_{it}
+$$
+
+* $Y_{it}$: outcome (e.g., upgrade status, market presence, price)
+* $\text{Treated}_i$: 1 if property was F/G before 2018, 0 otherwise
+* $\text{Post}_t$: 1 if year ≥ 2018
+* $\delta$: DiD coefficient of interest
+* $\mathbf{X}_{it}$: vector of covariates (e.g., property type, age, region, student/newbuild flags)
+
+#### **4.4.2 Multinomial Logit for Compliance Behaviour**
+
+To analyse heterogeneous responses within the treated group, we estimate a **multinomial logistic model** on properties initially rated F or G. The dependent variable indicates the compliance outcome:
+
+$$
+\Pr(Y_i = k) = \frac{e^{\mathbf{X}_i'\beta_k}}{\sum_{j=1}^K e^{\mathbf{X}_i'\beta_j}}, \quad k \in \{\text{Upgrade}, \text{Exit}, \text{Non-Compliance}\}
+$$
+
+This allows us to explore how property characteristics (e.g., type, age, region) are associated with compliance strategies.
+
+#### **4.4.3 Price Effects Conditional on Compliance**
+
+We also estimate whether MEES-compliant upgrades yield a price premium. This is done by comparing the average listing prices before and after MEES for upgraded versus non-upgraded properties:
+
+$$
+\log(\text{Price}_{it}) = \alpha + \delta_1 \text{Upgrade}_i + \delta_2 \text{Post}_t + \delta_3 (\text{Upgrade}_i \times \text{Post}_t) + \mathbf{X}_{it}'\gamma + \epsilon_{it}
+$$
+
+---
+
+### **4.5 Assumptions and Validation**
+
+#### **4.5.1 Parallel Trends Assumption**
+
+We test the **parallel trends assumption** by examining pre-treatment trends in key outcomes (e.g., listing price, EPC upgrades) between treated and control properties. This is supported by graphical diagnostics and placebo DiD estimations using pre-2018 data.
+
+#### **4.5.2 Robustness Checks**
+
+* Excluding regions with high student housing concentrations.
+* Dropping properties with missing or inconsistent EPC records.
+* Placebo policy implementation years (e.g., fake treatment in 2016).
+* Triple-differences model incorporating additional market segments.
+
+---
+
+### **4.6 Limitations**
+
+* Exit is observed as disappearance from listing data, which may also reflect a sale or off-market status.
+* EPC records may not capture unofficial upgrades or exemptions (e.g., listed buildings).
+* DiD relies on assumption of no spillovers from treated to control properties.
+
+---
+
+Would you like me to help you structure the **data section**, or expand this with **formal hypotheses** and how they link to each estimation strategy?
+
+Great — designing the dataset structure is a crucial step to ensure your methodology is executable and your estimates valid.
+
+Here’s a suggested **panel-style dataset format**, tailored to your DiD and multinomial analysis of the **MEES policy** impact on the UK rental market:
+
+---
+
+## ✅ **Dataset Format: Panel Data (Property × Time)**
+
+Each row should represent a **property-year** observation (or property-quarter if you use finer time resolution).
+
+### 🔹 **Column Schema (Variables)**
+
+| Column Name           | Type        | Description                                                                 |
+| --------------------- | ----------- | --------------------------------------------------------------------------- |
+| `property_id`         | string      | Unique ID for each property (persistent over time)                          |
+| `year` / `quarter`    | int         | Time period (e.g., 2017, 2018, 2019)                                        |
+| `post_policy`         | binary      | =1 if year ≥ 2018 (post-MEES), 0 otherwise                                  |
+| `treated`             | binary      | =1 if the property's EPC was F/G before 2018                                |
+| `initial_epc`         | string      | Original EPC rating before MEES (A-G)                                       |
+| `current_epc`         | string      | EPC rating in the current period (A-G), or `NaN` if not relisted            |
+| `epc_upgrade`         | binary      | =1 if EPC improved from F/G to E or better                                  |
+| `status`              | string      | Rental status: `Available`, `Let Agreed`, or `Removed` (e.g., not relisted) |
+| `compliance_outcome`  | categorical | `Upgraded`, `Still Non-Compliant`, or `Removed`                             |
+| `log_rent`            | float       | Log of the listing rent (if available)                                      |
+| `region`              | string      | Region in England (e.g., London, East Midlands)                             |
+| `property_type`       | string      | e.g., Flat, Detached, Terraced, Semi-Detached                               |
+| `construction_year`   | int         | Year of construction                                                        |
+| `is_student_property` | binary      | =1 if student housing, 0 otherwise                                          |
+| `is_newbuild`         | binary      | =1 if newly built property                                                  |
+| `listed`              | binary      | =1 if property is listed in that year, 0 otherwise                          |
+| `listing_count`       | int         | Number of times this property appeared in listings that year                |
+
+---
+
+### 🔸 **Example (Wide View)**
+
+| property\_id | year | post\_policy | treated | initial\_epc | current\_epc | epc\_upgrade | compliance\_outcome | status     | log\_rent | ... |
+| ------------ | ---- | ------------ | ------- | ------------ | ------------ | ------------ | ------------------- | ---------- | --------- | --- |
+| A123         | 2017 | 0            | 1       | G            | G            | 0            | Still Non-Compliant | Available  | 6.45      | ... |
+| A123         | 2019 | 1            | 1       | G            | E            | 1            | Upgraded            | Let Agreed | 6.90      | ... |
+| B456         | 2016 | 0            | 0       | E            | E            | 0            | Control             | Available  | 6.70      | ... |
+| B456         | 2020 | 1            | 0       | E            | E            | 0            | Control             | Let Agreed | 6.75      | ... |
+| C789         | 2017 | 0            | 1       | F            | F            | 0            | Still Non-Compliant | Available  | 6.50      | ... |
+| C789         | 2019 | 1            | 1       | F            | NaN          | 0            | Removed             | Removed    | NaN       | ... |
+
+---
+
+## 📌 Key Notes
+
+* **`treated`** is fixed for each property, based on pre-2018 EPC.
+* **`post_policy`** changes with time (e.g., 1 from 2018 onward).
+* **`compliance_outcome`** is determined only **post-policy** for treated properties:
+
+  * If EPC improves: `'Upgraded'`
+  * If property not listed anymore: `'Removed'`
+  * If still EPC F/G: `'Still Non-Compliant'`
+* **`epc_upgrade`** is useful for binary DiD.
+* **`log_rent`** allows you to study price dynamics and premiums.
+* **`listed`** or `status` helps determine exit from the market.
+
+---
+
+## 🛠 Optional Enhancements
+
+* **`time_to_upgrade`**: Number of quarters or years from policy start to upgrade.
+* **`price_per_m2`**: If floor area is available.
+* **`local_epc_average`**: Regional or postcode-level EPC mean to control for location quality.
+* **`market_exit`**: =1 if property disappears for ≥2 years post-policy.
+
+---
+
+Would you like help with:
+
+* Building this dataset in Python (e.g., from EPC + Zoopla listings)?
+* Automating the compliance classification logic?
+* Sample synthetic dataset to test your code on?
+
+Let me know how you'd like to proceed.
+
