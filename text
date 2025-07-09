@@ -184,3 +184,112 @@ Would you like help with:
 
 Let me know how you'd like to proceed.
 
+
+
+✅ Noted: your unit of analysis is **`flat_id × year`**, and when a flat has **multiple listings within the same year**, you'll keep only the **most recent** one.
+
+Would you like a Python snippet to filter your dataset accordingly? I can help ensure you retain just one observation per flat-year (based on the latest listing date).
+
+
+Here’s a clean **Python snippet** to help you:
+
+> ✅ Keep only the **most recent listing** per `flat_id × year`.
+
+Assumes you have:
+
+* A DataFrame `df`
+* Columns: `'flat_id'`, `'year'`, and `'listing_date'` (as a datetime)
+
+---
+
+### 🐍 Python Code
+
+```python
+import pandas as pd
+
+# Ensure listing_date is in datetime format
+df['listing_date'] = pd.to_datetime(df['listing_date'])
+
+# Sort so most recent listing comes first
+df_sorted = df.sort_values(by=['flat_id', 'year', 'listing_date'], ascending=[True, True, False])
+
+# Drop duplicates — keep most recent listing per flat-year
+df_deduped = df_sorted.drop_duplicates(subset=['flat_id', 'year'], keep='first')
+
+# Optional: reset index
+df_deduped = df_deduped.reset_index(drop=True)
+
+print(f"Filtered data: {df_deduped.shape[0]} unique flat-year observations")
+```
+
+---
+
+### ✅ Output
+
+Now `df_deduped` contains:
+
+* Exactly **one row per `flat_id × year`**
+* Always the **most recent listing** from that year
+
+---
+
+Let me know if:
+
+* Your date column has a different name (e.g. `'date_listed'`)
+* You want to add a step to compare rent changes between years per flat
+
+I'm happy to customize the code further.
+Great — here’s how to **compare rent changes between years for each flat** after deduplication. This will compute:
+
+> **Δ rent = current year’s rent – previous year’s rent** for each `flat_id`
+
+---
+
+### 🐍 Updated Python Code
+
+Assumes:
+
+* `df_deduped` contains one row per `flat_id × year`
+* Column `rent` (or `log_rent`) is your outcome variable
+
+---
+
+#### ✅ 1. Compute Rent Change (`delta_rent`)
+
+```python
+# Sort data for group-wise operations
+df_deduped = df_deduped.sort_values(by=['flat_id', 'year'])
+
+# Group by flat_id and calculate year-over-year rent change
+df_deduped['delta_rent'] = df_deduped.groupby('flat_id')['rent'].diff()
+
+# Optional: log rent change (useful for percentage interpretation)
+df_deduped['delta_log_rent'] = df_deduped.groupby('flat_id')['log_rent'].diff()
+
+# Inspect example
+df_deduped[['flat_id', 'year', 'rent', 'delta_rent']].head(10)
+```
+
+---
+
+### 📊 Interpretation
+
+| flat\_id | year | rent | delta\_rent |
+| -------- | ---- | ---- | ----------- |
+| F001     | 2016 | 1000 | NaN         |
+| F001     | 2017 | 1050 | 50          |
+| F001     | 2019 | 1100 | 50          |
+| F002     | 2017 | 900  | NaN         |
+| F002     | 2019 | 1000 | 100         |
+
+You can now use `delta_rent` as an additional outcome in robustness checks or event studies.
+
+---
+
+Let me know if:
+
+* You want to compute **percentage change**
+* You’re using **weekly or monthly rent** and want to annualize
+* You want a **lag of EPC rating or treatment status** to match rent effect
+
+Happy to expand!
