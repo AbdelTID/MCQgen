@@ -309,3 +309,33 @@ def remove_repeated_segments(address):
 
 # Apply to DataFrame
 df['clean_address'] = df['address'].apply(remove_repeated_segments)
+
+
+import zipfile
+import pandas as pd
+
+# Path to your ZIP file
+zip_path = 'your_file.zip'
+
+# List to collect DataFrames
+df_list = []
+
+# Define columns to read (case-sensitive match to CSV header)
+use_columns = ['Postcode', 'LocalAuthority', 'Address', 'UPRN']  # adapt as needed
+
+with zipfile.ZipFile(zip_path, 'r') as z:
+    for file_name in z.namelist():
+        if file_name.endswith('.csv'):
+            with z.open(file_name) as f:
+                try:
+                    df = pd.read_csv(f, usecols=use_columns)
+                    df['source_file'] = file_name  # optional
+                    df_list.append(df)
+                except ValueError:
+                    print(f"⚠️ Skipping file (missing columns): {file_name}")
+
+# Combine all DataFrames
+final_df = pd.concat(df_list, ignore_index=True)
+
+# Preview
+print(final_df.head())
