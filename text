@@ -339,3 +339,27 @@ final_df = pd.concat(df_list, ignore_index=True)
 
 # Preview
 print(final_df.head())
+
+
+
+Your text is already well-structured and clear. Below is a lightly edited version to improve flow, grammar, and consistency. I've preserved the structure and detail, just tightening the language for academic or professional writing:
+
+---
+
+We use rental listing data from **Rightmove UK**, covering the period **2005 to 2021**, comprising approximately **14 million transactions**. To enrich this dataset with energy performance information, we merge it with the **Energy Performance Certificate (EPC)** database using the **Unique Property Reference Number (UPRN)** as the linking key.
+
+However, many listings in the Rightmove data are missing UPRNs. To address this, we employ an **address-matching algorithm** that links the listing data to the EPC dataset by matching key address components (e.g., street name, postcode, building number). This allows us to infer UPRNs for listings with missing values. We validate the quality of the imputed UPRN variable by comparing it with the original UPRNs available in the listing data. The two variables exhibit a high correlation (ρ = 0.94), providing strong support for the reliability of our address-based UPRN matching procedure. We use these matched UPRNs to fill in the missing values in the listing data.
+
+We drop listings for which we are unable to identify a valid UPRN, as these properties cannot be matched to an EPC record and are therefore excluded from the analysis.
+
+Next, we construct a **unique property identifier** based on the address and number of bedrooms. Since door numbers are often missing in the listing data, we rely on a combination of address components and bedroom count to distinguish between properties. This approach helps differentiate listings that share the same address but likely correspond to different units within the same building.
+
+In cases where a property (defined by address and bedroom count) is listed multiple times within the same calendar year, we aggregate these entries into a single observation. We compute the **average listing price** for the year and retain the **modal value** for all categorical variables.
+
+We then divide the listing data into two periods: **pre-policy** and **post-policy**, based on the implementation date of the **Minimum Energy Efficiency Standard (MEES)** on **April 1, 2018**. Listings dated **before April 30, 2018** are matched with EPC records whose inspection dates also fall **before April 30, 2018**, ensuring temporal alignment between the rental listing and the EPC assessment.
+
+For **post-policy listings** (after April 30, 2018), we primarily match them with EPC ratings based on inspections conducted **after April 30, 2018**. However, in cases where a post-policy listing does not have a corresponding match in the post-policy EPC data, we allow it to be matched with its **pre-policy EPC rating**. This accounts for properties that have not undergone a new EPC inspection since the policy came into effect. In such cases, the most recent available EPC rating remains the relevant reference point.
+
+---
+
+Let me know if you'd like help with citations, figures, or a corresponding methodology diagram for this section.
