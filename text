@@ -382,3 +382,27 @@ This outcome framework allows us to distinguish between **compliance behavior** 
 ---
 
 Would you like help writing an empirical strategy for estimating the effect of MEES on these outcomes (e.g., multinomial logit, survival analysis, etc.)?
+Certainly! Here's an elaborated and polished version of the sentence, integrated into the same formal academic tone and flow as your previous methodology section:
+
+---
+
+To construct a credible comparison between treated and control groups, we implement **propensity score matching (PSM)**. This method addresses potential selection bias by ensuring that treated and control properties are comparable on observable characteristics.
+
+We define **treated properties** as those that are **non-compliant with the MEES regulation prior to April 2018**—typically those with an EPC rating of **F or G**—and that are subsequently observed in the **post-policy** period. The **control group** comprises properties that were already compliant with the regulation before its implementation (typically rated **E or better**) and are also observed in the post-policy period.
+
+We estimate the **propensity score** for each property—the probability of being treated—using a **logistic regression model**. The covariates include a rich set of pre-policy property characteristics such as:
+
+* Number of bedrooms
+* Property type (e.g., flat, detached, terraced)
+* Location (postcode district fixed effects)
+* Year fixed effects
+* Pre-policy average listing price
+* Observed energy efficiency sub-metrics (e.g., wall/roof insulation, heating system type) if available
+
+Each treated property is then matched to one or more control properties with similar propensity scores using **nearest-neighbor matching** without replacement and a caliper to restrict poor matches. We assess **covariate balance** before and after matching to ensure that the treatment and control groups are statistically comparable.
+
+This matching procedure enables us to estimate the **average treatment effect on the treated (ATT)** by comparing post-policy outcomes (e.g., listing prices) between treated and matched control units, holding observed pre-policy characteristics constant.
+
+---
+
+Let me know if you'd like this expanded with matching diagnostics (e.g., standardized mean differences, visual plots), or code snippets in Stata, R, or Python for implementation.
