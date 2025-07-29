@@ -363,3 +363,22 @@ For **post-policy listings** (after April 30, 2018), we primarily match them wit
 ---
 
 Let me know if you'd like help with citations, figures, or a corresponding methodology diagram for this section.
+Great — you're building a solid foundation for causal inference and outcome classification. Here's a refined and extended version of your paragraph that integrates it into a research-methods style section:
+
+---
+
+### Post-Policy Observation and Outcome Classification
+
+Not all properties in our sample are observed in the post-policy period. To understand the varied responses to the **Minimum Energy Efficiency Standard (MEES)**, we focus on the subset of **pre-policy non-compliant properties**—those with an **EPC rating of F or G**—and categorize their **post-policy outcomes** into three mutually exclusive groups:
+
+1. **Upgrade**: The property remains in the rental market and is associated with an EPC rating of **E or higher** in the post-policy period, indicating that the landlord undertook energy efficiency improvements to bring the property into compliance.
+
+2. **Exit**: The property is **no longer listed** for rent in the post-policy period and is not associated with a recent EPC inspection, suggesting that it may have **exited the formal rental market**—either withdrawn, sold, or repurposed.
+
+3. **Non-Compliance**: The property remains actively listed post-policy but retains an **EPC rating of F or G**, implying **ongoing non-compliance** with MEES regulations.
+
+This outcome framework allows us to distinguish between **compliance behavior** (upgrading vs. remaining non-compliant) and **market participation** (remaining in vs. exiting the rental market) in response to the regulatory change. It also facilitates a richer analysis of landlord responses by tracking how the most directly affected properties adapted—or failed to adapt—to the policy environment.
+
+---
+
+Would you like help writing an empirical strategy for estimating the effect of MEES on these outcomes (e.g., multinomial logit, survival analysis, etc.)?
